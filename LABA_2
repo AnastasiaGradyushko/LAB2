@@ -1,0 +1,114 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct list {
+    int value;
+    struct list *next;
+} list;
+
+list *push_start (int value){
+    list *i = (list*)malloc(sizeof(list));
+    /*i->name = name;*/
+    i->value = value;
+    i->next = NULL;
+    return i;
+}
+
+struct list * push_last(list *lst, int value){
+    struct list *temp, *p;
+    temp = (struct list*)malloc(sizeof(list));
+    p = lst->next;
+    lst->next = temp;
+    temp->value = value;
+    temp->next = p;
+    return temp;
+}
+
+void remove_last(list *lst){
+    list *p;
+    if (lst == NULL) return;
+    for (p=lst; p->next->next; p=p->next) ;
+    p->next = NULL;
+}
+
+void print_list(list *lst){
+    struct list *p;
+    p = lst;
+    do {
+        printf("%d ", p->value);
+        p = p->next;
+    } while (p != NULL);
+}
+
+void delete_list(list *lst){
+    while (lst != NULL){
+        list *p = lst;
+        lst = lst->next;
+        free(p);
+    }
+}
+
+void find(list *lst, int value){
+    while (lst != NULL){
+        list *p = lst;
+        lst = lst->next;
+        if (value == p->value){
+            printf("Element was found");
+            return;
+        }
+    }
+    printf("Element wasn't found");
+}
+
+int main(){
+    int choice;
+    menu:
+    printf("Choose an action:\n");
+    printf("1. Create 1st element\n");
+    printf("2. Add element to the end\n");
+    printf("3. Delete element from the end\n");
+    printf("4. Display a list\n");
+    printf("5. Delete a list\n");
+    printf("6. Find element in a list\n");
+    printf("7. Exit\n");
+    printf("Your choice: ");
+    scanf("%d", &choice);
+    switch (choice){
+    case 1: ;
+        int k;
+        printf("Enter the value of the first elem: ");
+        scanf("%d", &k);
+        struct list *i = push_start(k);
+        break;
+    case 2: {
+        int k;
+        printf("Enter the value of elem: ");
+        scanf("%d", &k);
+        push_last(i, k);
+        break;
+    }
+    case 3:
+        remove_last(i);
+        break;
+    case 4:
+        print_list(i);
+        break;
+    case 5:
+        delete_list(i);
+        break;
+    case 6: {
+        int k;
+        printf("Enter the value to find: ");
+        scanf("%d", &k);
+        find(i, k);
+        break;
+    }
+    case 7:
+        return 0;
+    default:
+        break;
+    }
+    printf("\n\n");
+    goto menu;
+    return 0;
+}
